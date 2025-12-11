@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>eddit.site - Filmy VOD i IPTV | Watch Movies Online</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="eddit.site - Najlepsza platforma VOD i IPTV. Oglądaj filmy, seriale i telewizję na żywo. Best VOD and IPTV platform. Watch movies, series and live TV online.">
+    <meta name="keywords" content="VOD, IPTV, filmy online, seriale, telewizja internetowa, watch movies, free streaming, polskie filmy, eddit site, video on demand">
+    <meta name="author" content="eddit.me">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://eddit.site/">
+    <meta property="og:title" content="eddit.site - Filmy VOD i IPTV">
+    <meta property="og:description" content="Oglądaj najnowsze hity kinowe i telewizję na żywo w najwyższej jakości.">
+    <meta property="og:image" content="https://i.imgur.com/P4awMmw.jpeg">
+
+    <!-- Tailwind CDN is kept for simplicity, though PostCSS is better for production -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              dodgerblue: '#1E90FF',
+              darkbg: '#0a0a0a',
+              cardbg: '#121212',
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            animation: {
+              'float': 'float 6s ease-in-out infinite',
+            },
+            keyframes: {
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #050505;
+        color: #ffffff;
+        overflow-x: hidden;
+      }
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0a0a0a;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #1E90FF;
+      }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.1",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.1/",
+    "react/": "https://esm.sh/react@^19.2.1/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.32.0",
+    "hls.js": "https://esm.sh/hls.js@^1.6.15",
+    "lucide-react": "https://esm.sh/lucide-react@^0.559.0",
+    "framer-motion": "https://esm.sh/framer-motion@^12.23.26",
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.10.1",
+    "vite": "https://esm.sh/vite@^7.2.7",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <!-- This script tag is essential for Vite to know where to start -->
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
