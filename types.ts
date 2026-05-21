@@ -27,7 +27,7 @@ export interface ContentItem {
 }
 
 export interface ChatMessage {
-  role: 'user' | 'model';
+  role: 'user' | 'assistant';
   text: string;
   isThinking?: boolean;
 }

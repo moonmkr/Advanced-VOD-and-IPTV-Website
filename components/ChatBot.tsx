@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Bot, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChatMessage } from '../types';
-import { sendMessageToGemini } from '../services/geminiService';
+import { sendMessageToOpenAI, type Message } from '../services/openaiService';
 
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'model', text: 'Hi! I am Eddit AI. Ask me anything about the movies or just chat!' }
+    { role: 'assistant', text: 'Hi! I am Eddit AI powered by ChatGPT. Ask me anything about the movies or just chat!' }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -27,15 +27,15 @@ const ChatBot: React.FC = () => {
     setInput('');
     setIsLoading(true);
 
-    // Prepare history for API
-    const history = messages.map(m => ({
-      role: m.role === 'model' ? 'model' : 'user',
-      parts: [{ text: m.text }]
+    // Prepare history for API - convert to OpenAI format
+    const history: Message[] = messages.map(m => ({
+      role: m.role === 'assistant' ? 'assistant' : 'user',
+      content: m.text
     }));
 
-    const responseText = await sendMessageToGemini(userMsg.text, history);
+    const responseText = await sendMessageToOpenAI(userMsg.text, history);
 
-    const modelMsg: ChatMessage = { role: 'model', text: responseText };
+    const modelMsg: ChatMessage = { role: 'assistant', text: responseText };
     setMessages(prev => [...prev, modelMsg]);
     setIsLoading(false);
   };
@@ -56,7 +56,7 @@ const ChatBot: React.FC = () => {
               <div className="flex items-center gap-2">
                 <Bot className="w-5 h-5 text-dodgerblue" />
                 <span className="font-semibold text-white">Eddit AI</span>
-                <span className="text-[10px] bg-dodgerblue/20 text-dodgerblue px-2 py-0.5 rounded-full border border-dodgerblue/20">Gemini 3 Pro</span>
+                <span className="text-[10px] bg-dodgerblue/20 text-dodgerblue px-2 py-0.5 rounded-full border border-dodgerblue/20">GPT-4 Turbo</span>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}

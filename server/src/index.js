@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -7,6 +8,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { authMiddleware, adminOnly, SECRET } = require('./middleware');
 const { v4: uuidv4 } = require('uuid');
+const OpenAI = require('openai');
 
 const app = express();
 app.use(cors());
@@ -240,6 +242,57 @@ app.get('/api/v1/users', (req, res) => {
   const db = readDb();
   res.json(db.users || []);
 });
+// OpenAI Proxy Endpoint
+app.post('/api/v1/openai/chat', async (req, res) => {
+  try {
+    const { messages } = req.body;
+    const apiKey = process.env.OPENAI_API_KEY;
+    
+    console.log('OpenAI Request received');
+    console.log('API Key configured:', !!apiKey);
+    console.log('Messages:', messages);
+    
+    if (!apiKey) {
+      return res.status(400).json({ error: 'OpenAI API key not configured' });
+    }
+
+    const client = new OpenAI({ apiKey });
+    
+    const response = await client.chat.completions.create({
+      model: 'gpt-4-turbo',
+      messages: messages || [],
+      temperature: 0.7,
+      max_tokens: 1000,
+    });
+
+    const content = response.choices[0]?.message?.content;
+    console.log('OpenAI Response successful');
+    return res.json({ content });
+  } catch (error) {
+    console.error('OpenAI API Error:', error.message);
+    console.error('Error details:', error);
+    res.status(500).json({ error: error.message || 'OpenAI request failed' });
+  }
+});
+
+// REST Channels endpoints
+app.get('/api/v1/channels', (req, res) => {
+  const db = readDb();
+  res.json(db.channels || []);
+});
+
+app.get('/api/v1/channels/:id', (req, res) => {
+  const db = readDb();
+  const channel = (db.channels || []).find(c => c.id === req.params.id);
+  if (!channel) return res.status(404).json({ error: 'Channel not found' });
+  res.json(channel);
+});
+
+app.get('/api/v1/channels/category/:category', (req, res) => {
+  const db = readDb();
+  const channels = (db.channels || []).filter(c => c.category === req.params.category);
+  res.json(channels);
+});
 
 const port = process.env.PORT || 3000;
 // Ensure a default admin exists for initial setup
@@ -248,10 +301,10 @@ const port = process.env.PORT || 3000;
     const db = readDb();
     if (!db.users || db.users.length === 0) {
       (async () => {
-        const hashed = await bcrypt.hash('admin', 10);
-        db.users = [{ id: uuidv4(), username: 'eddit', password: hashed, role: 'admin', email: 'admin@localhost', registeredAt: new Date().toISOString(), lastActive: new Date().toISOString(), isActive: true }];
+        const hashed = await bcrypt.hash('admin123', 10);
+        db.users = [{ id: uuidv4(), username: 'admin', password: hashed, role: 'admin', email: 'admin@localhost', registeredAt: new Date().toISOString(), lastActive: new Date().toISOString(), isActive: true }];
         writeDb(db);
-        console.log('Created default admin user: eddit / admin');
+        console.log('Created default admin user: admin / admin123');
       })();
     }
   } catch (e) { console.warn('Could not ensure default admin', e); }

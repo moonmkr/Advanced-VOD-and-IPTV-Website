@@ -139,7 +139,9 @@ const handleMockRequest = async (url: string, options?: RequestInit): Promise<an
 
 const fetchJSON = async (url: string, options?: RequestInit) => {
     try {
-        const res = await fetch(url, options);
+        const opts = { ...options };
+        if (options?.body && !opts.headers) opts.headers = { 'Content-Type': 'application/json' };
+        const res = await fetch(url, opts);
         if (!res.ok) {
             // If 404/500, backend is missing. Switch to mock.
             return handleMockRequest(url, options);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { HashRouter, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import Background3D from './components/Background3D';
+import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Admin from './pages/Admin';
 import Watch from './pages/Watch';
@@ -141,6 +142,7 @@ const App: React.FC = () => {
             </Routes>
             </main>
             <Footer />
+            <ChatBot />
         </Background3D>
       </LanguageProvider>
     </HashRouter>
