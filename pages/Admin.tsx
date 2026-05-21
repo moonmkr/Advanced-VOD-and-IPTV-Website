@@ -618,6 +618,77 @@ const Admin: React.FC = () => {
                       <button onClick={handleSaveSettings} className="w-full bg-dodgerblue hover:bg-blue-600 text-white font-bold py-3 rounded-lg">Save Settings</button>
                   </div>
               </div>
+              
+              <div className="mt-6 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+                  <h3 className="font-bold text-lg mb-4 text-white">Admin: Stream Ingestion</h3>
+                  <div className="space-y-4">
+                      <div>
+                          <label className="text-xs text-gray-400 block mb-1">Import M3U URL</label>
+                          <input type="url" placeholder="https://example.com/playlist.m3u" id="m3uUrl" className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 focus:border-dodgerblue" />
+                          <div className="flex gap-2 mt-2">
+                              <button onClick={async () => {
+                                  const el = document.getElementById('m3uUrl') as HTMLInputElement | null;
+                                  if (!el || !el.value) return alert('Enter M3U URL');
+                                  const r = await dataService.ingestM3U(el.value);
+                                  if (r.error) alert('Failed: ' + r.error); else alert('Imported ' + (r.added||r.added||r.addedCount||r.added || r.added) + ' channels');
+                                  refreshData();
+                              }} className="bg-dodgerblue hover:bg-blue-600 text-white px-4 py-2 rounded">Import M3U</button>
+                              <button onClick={async () => {
+                                  const el = document.getElementById('m3uUrl') as HTMLInputElement | null;
+                                  if (!el || !el.value) return alert('Enter M3U URL');
+                                  const r = await dataService.ingestM3U(el.value);
+                                  if (r.error) alert('Failed: ' + r.error); else alert('Imported ' + (r.added||r.addedCount||'?') + ' channels');
+                                  refreshData();
+                              }} className="bg-white/5 hover:bg-white/10 text-gray-200 px-4 py-2 rounded">Import (silent)</button>
+                          </div>
+                      </div>
+
+                      <div>
+                          <label className="text-xs text-gray-400 block mb-1">Xtream Codes / Provider</label>
+                          <div className="grid grid-cols-1 gap-2">
+                              <input type="text" id="xtreamHost" placeholder="https://xtream.host" className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2" />
+                              <div className="grid grid-cols-2 gap-2">
+                                  <input type="text" id="xtreamUser" placeholder="username" className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2" />
+                                  <input type="password" id="xtreamPass" placeholder="password" className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2" />
+                              </div>
+                          </div>
+                          <div className="flex gap-2 mt-2">
+                              <button onClick={async () => {
+                                  const host = (document.getElementById('xtreamHost') as HTMLInputElement).value;
+                                  const user = (document.getElementById('xtreamUser') as HTMLInputElement).value;
+                                  const pass = (document.getElementById('xtreamPass') as HTMLInputElement).value;
+                                  if (!host || !user || !pass) return alert('Provide host/user/pass');
+                                  const r = await dataService.ingestXtream(host, user, pass);
+                                  if (r.error) alert('Failed: ' + r.error); else alert('Imported ' + (r.added||r.addedCount||'?') + ' channels');
+                                  refreshData();
+                              }} className="bg-dodgerblue hover:bg-blue-600 text-white px-4 py-2 rounded">Import Xtream</button>
+                              <button onClick={() => { (document.getElementById('xtreamHost') as HTMLInputElement).value=''; (document.getElementById('xtreamUser') as HTMLInputElement).value=''; (document.getElementById('xtreamPass') as HTMLInputElement).value=''; }} className="bg-white/5 hover:bg-white/10 text-gray-200 px-4 py-2 rounded">Clear</button>
+                          </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-white/5">
+                          <h4 className="text-sm font-bold mb-2">Create Subscriber</h4>
+                          <div className="grid grid-cols-1 gap-2">
+                              <input type="text" id="subUser" placeholder="username" className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2" />
+                              <input type="password" id="subPass" placeholder="password" className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2" />
+                              <input type="date" id="subExpiry" className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2" />
+                              <div className="flex gap-2">
+                                  <button onClick={async () => {
+                                      const username = (document.getElementById('subUser') as HTMLInputElement).value;
+                                      const password = (document.getElementById('subPass') as HTMLInputElement).value;
+                                      const expirationDate = (document.getElementById('subExpiry') as HTMLInputElement).value || undefined;
+                                      if (!username || !password) return alert('Provide username and password');
+                                      const r = await dataService.createSubscriber(username, password, expirationDate);
+                                      if (r.error) return alert('Failed: ' + r.error);
+                                      alert('Subscriber created: ' + JSON.stringify(r));
+                                      refreshData();
+                                  }} className="bg-dodgerblue hover:bg-blue-600 text-white px-4 py-2 rounded">Create Subscriber</button>
+                                  <button onClick={() => { (document.getElementById('subUser') as HTMLInputElement).value=''; (document.getElementById('subPass') as HTMLInputElement).value=''; (document.getElementById('subExpiry') as HTMLInputElement).value=''; }} className="bg-white/5 hover:bg-white/10 text-gray-200 px-4 py-2 rounded">Clear</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
           </div>
       )}
 

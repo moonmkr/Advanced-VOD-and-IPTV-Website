@@ -6,8 +6,8 @@ const isDev = typeof import.meta !== 'undefined' &&
               (import.meta as any).env && 
               (import.meta as any).env.DEV;
 
-// POINTING TO NEW API FILE
-const API_URL = 'api_handler.php'; 
+// POINTING TO NEW API FILE (Express compatibility layer)
+const API_URL = 'http://localhost:3000/api_handler.php'; 
 
 const CURRENT_USER_KEY = 'eddit_current_user_cache';
 const MOCK_DELAY = 600; 
@@ -366,4 +366,27 @@ export const dataService = {
       }
   },
   downloadJSON: () => {}
+  ,
+  // --- ADMIN IMPORT HELPERS (new REST endpoints) ---
+  ingestM3U: async (url: string) => {
+      try {
+          const res = await fetch('http://localhost:3000/api/v1/admin/ingest/m3u', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) });
+          const j = await res.json();
+          return j;
+      } catch (e) { console.error(e); return { error: String(e) }; }
+  },
+  ingestXtream: async (host: string, username: string, password: string) => {
+      try {
+          const res = await fetch('http://localhost:3000/api/v1/admin/ingest/xtream', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ host, username, password }) });
+          const j = await res.json();
+          return j;
+      } catch (e) { console.error(e); return { error: String(e) }; }
+  },
+  createSubscriber: async (username: string, password: string, expirationDate?: string) => {
+      try {
+          const res = await fetch('http://localhost:3000/api/v1/admin/subscriber', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password, expirationDate }) });
+          const j = await res.json();
+          return j;
+      } catch (e) { console.error(e); return { error: String(e) }; }
+  }
 };

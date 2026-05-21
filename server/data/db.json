@@ -1,0 +1,19 @@
+{
+  "users": [
+    {
+      "id": "62b77b14-6602-47d8-84f6-90ba9270a842",
+      "username": "eddit",
+      "password": "$2a$10$hZ7OuQEsHMa6m9GGw4HIXezNzE7v/GbN5SvymhhxcZ8u5ll74RoXe",
+      "role": "admin",
+      "email": "admin@localhost",
+      "registeredAt": "2026-05-21T18:28:26.925Z",
+      "lastActive": "2026-05-21T18:28:26.926Z",
+      "isActive": true
+    }
+  ],
+  "channels": [],
+  "requests": [],
+  "comments": [],
+  "notifications": [],
+  "settings": {}
+}
